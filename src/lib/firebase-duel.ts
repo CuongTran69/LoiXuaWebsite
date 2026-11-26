@@ -14,7 +14,11 @@ import {
   type Database,
   type Unsubscribe,
 } from 'firebase/database';
-import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+import {
+  initializeAppCheck,
+  ReCaptchaEnterpriseProvider,
+  ReCaptchaV3Provider,
+} from 'firebase/app-check';
 import { DUEL_ALGO_VERSION, type DuelMode } from '@/core/duel';
 
 // Public Firebase Web Config for project `loixua-33681` (same RTDB as iOS/Android)
@@ -38,8 +42,13 @@ function getFirebaseApp(): FirebaseApp {
     const siteKey = import.meta.env.PUBLIC_FIREBASE_APP_CHECK_SITE_KEY;
     if (siteKey && !appCheckInitialized && typeof window !== 'undefined') {
       appCheckInitialized = true;
+      const providerType = import.meta.env.PUBLIC_FIREBASE_APP_CHECK_PROVIDER;
+      const provider =
+        providerType === 'v3'
+          ? new ReCaptchaV3Provider(siteKey)
+          : new ReCaptchaEnterpriseProvider(siteKey);
       initializeAppCheck(appInstance, {
-        provider: new ReCaptchaV3Provider(siteKey),
+        provider,
         isTokenAutoRefreshEnabled: true,
       });
     }

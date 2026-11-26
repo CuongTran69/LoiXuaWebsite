@@ -34,7 +34,8 @@ npm run build   # Build tĩnh toàn bộ ~980+ trang SEO & interactive islands v
 
 3. **Firebase Web App & App Check (`loixua-33681`):**
    - Trong Firebase Console → Project Settings → Add **Web App** để lấy `PUBLIC_FIREBASE_APP_ID`.
-   - Trong Firebase Console → App Check → Apps → đăng ký Web App với **reCAPTCHA v3** (thêm domain `loixua.tmkstudio.io.vn`), lấy site key điền vào biến môi trường `PUBLIC_FIREBASE_APP_CHECK_SITE_KEY` trên Cloudflare Pages.
+   - Trong Google Cloud Console (cùng project `loixua-33681`) → bật **reCAPTCHA Enterprise API** / **Fraud Defense** → tạo Web key (loại score-based, thêm domain `loixua.tmkstudio.io.vn`) lấy Site Key.
+   - Trong Firebase Console → App Check → Apps → đăng ký Web App bằng **Fraud Defense (formerly known as reCAPTCHA Enterprise)** (mục reCAPTCHA Classic đã bị Google khoá cho đăng ký mới), rồi điền Site Key vào `PUBLIC_FIREBASE_APP_CHECK_SITE_KEY` trên Cloudflare Pages.
    - Đảm bảo **Authorized domains** trong Authentication → Settings có `loixua.tmkstudio.io.vn`.
 
 4. **Biến môi trường (tuỳ chọn):**
