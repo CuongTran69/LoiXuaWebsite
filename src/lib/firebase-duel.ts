@@ -19,13 +19,14 @@ import { DUEL_ALGO_VERSION, type DuelMode } from '@/core/duel';
 
 // Public Firebase Web Config for project `loixua-33681` (same RTDB as iOS/Android)
 const FIREBASE_CONFIG = {
-  apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY || 'AIzaSyBm5me3vMFsV_ICs6Xz3Ho3dmDeue3-SEI',
+  apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY || 'AIzaSyBLs6HEhmUkKMeUvRjRzugIGxRKYdlaAJI',
   authDomain: 'loixua-33681.firebaseapp.com',
   databaseURL: 'https://loixua-33681-default-rtdb.asia-southeast1.firebasedatabase.app',
   projectId: 'loixua-33681',
   storageBucket: 'loixua-33681.firebasestorage.app',
   messagingSenderId: '263588340830',
-  appId: import.meta.env.PUBLIC_FIREBASE_APP_ID || '1:263588340830:web:loixuaweb',
+  appId: import.meta.env.PUBLIC_FIREBASE_APP_ID || '1:263588340830:web:42daea5f35b16afccec0cf',
+  measurementId: import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-Q8Q80FWC3F',
 };
 
 let appInstance: FirebaseApp | null = null;

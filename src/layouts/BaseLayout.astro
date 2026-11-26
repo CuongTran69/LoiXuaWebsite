@@ -30,7 +30,7 @@ const {
 } = Astro.props;
 
 const canonicalUrl = new URL(canonicalPath, 'https://loixua.tmkstudio.io.vn').toString();
-const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-Q8Q80FWC3F';
 const jsonLdList = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 ---
 
