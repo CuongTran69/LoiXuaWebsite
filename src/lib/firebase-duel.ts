@@ -39,7 +39,9 @@ let appCheckInitialized = false;
 function getFirebaseApp(): FirebaseApp {
   if (!appInstance) {
     appInstance = getApps()[0] ?? initializeApp(FIREBASE_CONFIG);
-    const siteKey = import.meta.env.PUBLIC_FIREBASE_APP_CHECK_SITE_KEY;
+    const siteKey =
+      import.meta.env.PUBLIC_FIREBASE_APP_CHECK_SITE_KEY ||
+      '6Ld1RDMuAAAAADS9y4cqLcLImIpfVQKWxkrA3EG_';
     if (siteKey && !appCheckInitialized && typeof window !== 'undefined') {
       appCheckInitialized = true;
       const providerType = import.meta.env.PUBLIC_FIREBASE_APP_CHECK_PROVIDER;
@@ -47,10 +49,14 @@ function getFirebaseApp(): FirebaseApp {
         providerType === 'v3'
           ? new ReCaptchaV3Provider(siteKey)
           : new ReCaptchaEnterpriseProvider(siteKey);
-      initializeAppCheck(appInstance, {
-        provider,
-        isTokenAutoRefreshEnabled: true,
-      });
+      try {
+        initializeAppCheck(appInstance, {
+          provider,
+          isTokenAutoRefreshEnabled: true,
+        });
+      } catch {
+        // Ignore blocked App Check init so Unenforced RTDB fallback continues working
+      }
     }
   }
   return appInstance;
