@@ -1,0 +1,12 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import FavoritesApp from '@/components/FavoritesApp';
+---
+
+<BaseLayout
+  title="Câu đã lưu | Lời Xưa"
+  description="Danh sách các câu ca dao, tục ngữ, thành ngữ bạn đã yêu thích và lưu lại trên trình duyệt."
+  canonicalPath="/da-luu"
+>
+  <FavoritesApp client:load />
+</BaseLayout>

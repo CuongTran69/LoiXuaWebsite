@@ -1,0 +1,284 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import GlossaryVerse from '@/components/GlossaryVerse';
+import SayingActions from '@/components/SayingActions';
+import AppBanner from '@/components/AppBanner.astro';
+import {
+  audioManifest,
+  categories,
+  getAudioUrl,
+  getCategoryBySlug,
+  getRelatedSayings,
+  getSayingSlug,
+  sayings,
+} from '@/data/catalog';
+import { REGION_LABELS, TYPE_LABELS, type Saying } from '@/core/types';
+
+export function getStaticPaths() {
+  return sayings.map((saying) => ({
+    params: { slug: getSayingSlug(saying) },
+    props: { saying },
+  }));
+}
+
+interface Props {
+  saying: Saying;
+}
+
+const { saying } = Astro.props;
+const slug = getSayingSlug(saying);
+const typeLabel = TYPE_LABELS[saying.type];
+const firstLine = saying.text.split('\n')[0]?.trim() || saying.text;
+const title = `${firstLine} — Giải nghĩa ${typeLabel} | Lời Xưa`;
+const description = saying.meaning
+  ? `${saying.text.replace(/\n/g, ' / ')} — Ý nghĩa: ${saying.meaning}`
+  : `Tìm hiểu ý nghĩa, nguồn gốc và cách dùng câu ${typeLabel.toLowerCase()}: ${saying.text.replace(/\n/g, ' / ')}.`;
+
+const related = getRelatedSayings(saying, 4);
+const catObjects = saying.categories
+  .map((c) => getCategoryBySlug(c) ?? categories.find((cat) => cat.slug === c))
+  .filter(Boolean);
+
+const verseAudioUrl = getAudioUrl(saying.id, 'verse');
+const meaningAudioUrl = getAudioUrl(saying.id, 'meaning');
+const audioMeta = audioManifest.files[saying.id];
+
+const schemas = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Lời Xưa', item: 'https://loixua.tmkstudio.io.vn/' },
+      { '@type': 'ListItem', position: 2, name: typeLabel, item: `https://loixua.tmkstudio.io.vn/loai/${saying.type}` },
+      { '@type': 'ListItem', position: 3, name: firstLine, item: `https://loixua.tmkstudio.io.vn/cau/${slug}` },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: firstLine,
+    description,
+    inLanguage: 'vi',
+    license: 'https://creativecommons.org/licenses/by-sa/4.0/',
+    author: { '@type': 'Organization', name: 'Lời Xưa' },
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description.slice(0, 160)}
+  canonicalPath={`/cau/${slug}`}
+  ogType="article"
+  jsonLd={schemas}
+>
+  <div class="space-y-10">
+    <nav aria-label="Đường dẫn" class="text-xs flex flex-wrap items-center gap-1.5" style="color: var(--cdv-text-secondary);">
+      <a href="/" class="hover:underline no-underline" style="color: inherit;">Trang chủ</a>
+      <span aria-hidden="true">/</span>
+      <a href="/kham-pha" class="hover:underline no-underline" style="color: inherit;">Kho tàng</a>
+      <span aria-hidden="true">/</span>
+      <a href={`/loai/${saying.type}`} class="hover:underline no-underline" style="color: inherit;">{typeLabel}</a>
+      {catObjects[0] && (
+        <>
+          <span aria-hidden="true">/</span>
+          <a href={`/chu-de/${catObjects[0].slug}`} class="hover:underline no-underline" style="color: inherit;">{catObjects[0].name}</a>
+        </>
+      )}
+    </nav>
+
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] items-start">
+      {/* Main Literary Reading Column */}
+      <article class="cdv-surface p-6 sm:p-10 space-y-8">
+        <header class="space-y-5">
+          <div class="flex flex-wrap items-center gap-2">
+            <a
+              href={`/loai/${saying.type}`}
+              class="px-2.5 py-0.5 rounded-md text-xs font-bold uppercase tracking-wider no-underline"
+              style="background-color: color-mix(in srgb, var(--cdv-cinnabar-text) 12%, transparent); color: var(--cdv-cinnabar-text);"
+            >
+              {typeLabel}
+            </a>
+            {saying.region && (
+              <span class="px-2.5 py-0.5 rounded-md text-xs border" style="border-color: var(--cdv-border); color: var(--cdv-text-secondary);">
+                {REGION_LABELS[saying.region] ?? saying.region}
+              </span>
+            )}
+          </div>
+
+          <GlossaryVerse client:load text={saying.text} glossary={saying.glossary} hero={true} asHeading={true} />
+
+          {saying.glossary && saying.glossary.length > 0 && (
+            <p class="text-xs m-0 cdv-prose cdv-prose-reading" style="color: var(--cdv-text-tertiary);">
+              Nhấp vào các từ có gạch chân nét đứt để tra nhanh nghĩa từ cổ hoặc điển tích.
+            </p>
+          )}
+        </header>
+
+        <SayingActions
+          client:load
+          saying={saying}
+          verseAudioUrl={verseAudioUrl}
+          meaningAudioUrl={meaningAudioUrl}
+          verseDurationMs={audioMeta?.vd}
+          meaningDurationMs={audioMeta?.md}
+        />
+
+        {saying.meaning && (
+          <section class="pt-6 border-t space-y-2 cdv-prose" style={{ borderColor: 'var(--cdv-border)' }}>
+            <h2 class="text-sm font-bold uppercase tracking-wider m-0" style="color: var(--cdv-cinnabar-text);">Giải nghĩa</h2>
+            <p class="text-base leading-relaxed m-0">{saying.meaning}</p>
+          </section>
+        )}
+
+        {saying.origin && (
+          <section class="space-y-2 cdv-prose">
+            <h2 class="text-sm font-bold uppercase tracking-wider m-0" style="color: var(--cdv-bamboo-text);">Nguồn gốc &amp; Bối cảnh</h2>
+            <p class="text-sm leading-relaxed m-0" style="color: var(--cdv-text-secondary);">{saying.origin}</p>
+          </section>
+        )}
+
+        {saying.example && (
+          <section class="cdv-elevated p-4 sm:p-5 space-y-1.5 cdv-prose">
+            <h2 class="text-xs font-bold uppercase tracking-wider m-0" style="color: var(--cdv-amber-text);">Ngữ cảnh sử dụng</h2>
+            <p class="text-sm italic m-0 leading-relaxed">{saying.example}</p>
+          </section>
+        )}
+
+        {saying.glossary && saying.glossary.length > 0 && (
+          <section class="space-y-3 pt-2">
+            <h2 class="text-sm font-bold uppercase tracking-wider m-0">Từ điển chú giải</h2>
+            <dl class="grid gap-2.5 sm:grid-cols-2 m-0">
+              {saying.glossary.map((g) => (
+                <div class="cdv-elevated p-3.5">
+                  <dt class="font-bold text-sm" style="color: var(--cdv-cinnabar-text);">{g.word}</dt>
+                  <dd class="text-xs m-0 mt-1 leading-relaxed" style="color: var(--cdv-text-secondary);">{g.meaning}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
+      </article>
+
+      {/* Sticky Reference Sidebar */}
+      <aside class="space-y-5 lg:sticky lg:top-24">
+        <div class="cdv-surface p-5 space-y-4">
+          <h2 class="text-xs font-bold uppercase tracking-wider m-0" style="color: var(--cdv-text-tertiary);">
+            Thông tin lưu trữ
+          </h2>
+          <dl class="space-y-3 text-xs m-0">
+            <div>
+              <dt class="m-0 font-semibold" style="color: var(--cdv-text-secondary);">Chủ đề</dt>
+              <dd class="m-0 mt-1.5 flex flex-wrap gap-1.5">
+                {catObjects.map((cat) => cat && (
+                  <a
+                    href={`/chu-de/${cat.slug}`}
+                    class="px-2.5 py-1 rounded-md border no-underline hover:opacity-85"
+                    style="border-color: var(--cdv-border); background-color: var(--cdv-elevated); color: var(--cdv-text);"
+                  >
+                    {cat.name}
+                  </a>
+                ))}
+              </dd>
+            </div>
+            <div>
+              <dt class="m-0 font-semibold" style="color: var(--cdv-text-secondary);">Nguồn trích dẫn</dt>
+              <dd class="m-0 mt-1">
+                {saying.sourceURL ? (
+                  <a href={saying.sourceURL} target="_blank" rel="noopener noreferrer" class="underline" style="color: var(--cdv-cinnabar-text);">
+                    {saying.source || 'Wikiquote tiếng Việt'}
+                  </a>
+                ) : (
+                  <span>{saying.source || 'Kho tàng Ca dao người Việt'}</span>
+                )}
+              </dd>
+            </div>
+            <div>
+              <dt class="m-0 font-semibold" style="color: var(--cdv-text-secondary);">Giấy phép</dt>
+              <dd class="m-0 mt-1">
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.vi" target="_blank" rel="noopener noreferrer" class="underline" style="color: var(--cdv-bamboo-text);">
+                  {saying.license || 'CC BY-SA 4.0'}
+                </a>
+              </dd>
+            </div>
+          </dl>
+
+          <div class="pt-3 border-t flex flex-col gap-2" style={{ borderColor: 'var(--cdv-border)' }}>
+            <a href="/do-vui" className="cdv-btn-secondary text-xs w-full">Luyện đố vui nối vế</a>
+            <a href="/luot-tho" className="cdv-btn-secondary text-xs w-full">Chế độ Lướt thơ</a>
+          </div>
+        </div>
+
+        <div class="cdv-surface p-5 space-y-3">
+          <div class="flex items-center gap-3">
+            <img src="/icons/app-icon.png" alt="Lời Xưa App" width="40" height="40" class="rounded-xl shrink-0" />
+            <div>
+              <p class="font-bold text-xs m-0">Nghe &amp; lưu offline trên App</p>
+              <p class="text-[11px] m-0 mt-0.5" style="color: var(--cdv-text-secondary);">Không quảng cáo · Widget hằng ngày</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <a
+              href="https://apps.apple.com/app/apple-store/id6820905528?pt=128454365&ct=web&mt=8"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-lg text-xs font-semibold no-underline border"
+              style="background-color: #111111; color: #FFFFFF; border-color: #2A2A2A;"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.85c.67-.82 1.13-1.96 1-3.1-.98.04-2.16.66-2.86 1.48-.61.71-1.15 1.87-.99 2.98 1.1.08 2.21-.57 2.85-1.36z"/>
+              </svg>
+              <span>App Store</span>
+            </a>
+            <a
+              href="https://tmkstudio.io.vn/loixua-android"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="cdv-btn-secondary text-xs font-semibold py-2 px-2.5"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#00D2FF" d="M3.61 1.81L13.79 12 3.61 22.19a1.94 1.94 0 0 1-.61-1.39V3.2c0-.53.22-1.01.61-1.39z"/>
+                <path fill="#00F076" d="M13.79 12L5.46 1.46l12.01 6.86-3.68 3.68z"/>
+                <path fill="#FF3A44" d="M13.79 12l3.68 3.68-12.01 6.86L13.79 12z"/>
+                <path fill="#FFD800" d="M17.47 8.32l3.52 2.01c.95.54.95 1.43 0 1.97l-3.52 2.02L13.79 12l3.68-3.68z"/>
+              </svg>
+              <span>CH Play</span>
+            </a>
+          </div>
+          <button type="button" data-open-app-popup class="w-full text-center text-[11px] font-medium underline bg-transparent border-0 p-0 cursor-pointer" style="color: var(--cdv-cinnabar-text);">
+            Hiện mã QR cài đặt nhanh
+          </button>
+        </div>
+      </aside>
+    </div>
+
+    {related.length > 0 && (
+      <section class="space-y-4 pt-4 border-t" style={{ borderColor: 'var(--cdv-border)' }}>
+        <h2 class="text-xl font-bold m-0" style={{ fontFamily: 'var(--cdv-poem-font)' }}>Câu cùng mạch ý</h2>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 items-start">
+          {related.map((item) => (
+            <a
+              href={`/cau/${getSayingSlug(item)}`}
+              class="cdv-card cdv-card-interactive cdv-editorial-card p-5 no-underline"
+              style="color: var(--cdv-text);"
+            >
+              <div class="space-y-2.5 min-w-0">
+                <span class="block text-[11px] font-bold uppercase tracking-wider" style="color: var(--cdv-cinnabar-text);">
+                  {TYPE_LABELS[item.type]}
+                </span>
+                <p class="cdv-poem text-base font-medium m-0 whitespace-pre-line">{item.text}</p>
+              </div>
+              {item.meaning && (
+                <p class="text-xs m-0 line-clamp-2 pt-2.5 border-t" style="border-color: var(--cdv-border); color: var(--cdv-text-secondary);">{item.meaning}</p>
+              )}
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <div class="lg:hidden">
+      <AppBanner />
+    </div>
+  </div>
+</BaseLayout>

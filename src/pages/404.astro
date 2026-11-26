@@ -1,0 +1,27 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Không tìm thấy trang | Lời Xưa" canonicalPath="/404">
+  <section class="cdv-surface p-8 md:p-12 text-center space-y-5 max-w-xl mx-auto my-10">
+    <div
+      class="w-12 h-12 mx-auto rounded-full flex items-center justify-center"
+      style="background: color-mix(in srgb, var(--cdv-accent) 12%, transparent); color: var(--cdv-accent);"
+      aria-hidden="true"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/>
+        <path d="m9 9.5 6 3"/>
+        <path d="m15 9.5-6 3"/>
+      </svg>
+    </div>
+    <h1 class="text-2xl md:text-3xl font-bold m-0" style="font-family: var(--cdv-poem-font);">Không tìm thấy trang này</h1>
+    <p class="cdv-prose mx-auto text-sm m-0" style="color: var(--cdv-text-secondary);">
+      Đường dẫn có thể đã thay đổi hoặc câu bạn tìm chưa có trong kho dữ liệu.
+    </p>
+    <div class="flex flex-wrap justify-center gap-2.5 pt-2">
+      <a href="/" class="cdv-btn-primary text-sm">Về trang chủ</a>
+      <a href="/tim-kiem" class="cdv-btn-secondary text-sm">Tìm kiếm câu ca dao</a>
+    </div>
+  </section>
+</BaseLayout>

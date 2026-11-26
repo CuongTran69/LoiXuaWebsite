@@ -1,0 +1,14 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import WindDownApp from '@/components/WindDownApp';
+---
+
+<BaseLayout
+  title="Phòng Nghe ban đêm & Nhạc thiền | Lời Xưa"
+  description="Thư giãn ban đêm với giọng đọc ca dao chậm rãi, giải nghĩa êm dịu, nhạc nền thiền Web Audio và bộ hẹn giờ tắt."
+  canonicalPath="/nghe-ngu"
+  hideMiniPlayer={true}
+  forceTheme="dark"
+>
+  <WindDownApp client:load />
+</BaseLayout>

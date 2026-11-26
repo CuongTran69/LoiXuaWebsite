@@ -1,0 +1,624 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light dark;
+
+  --cdv-bg-light: #F7F3EB;
+  --cdv-bg-dark: #131110;
+  --cdv-card-light: #FCF9F2;
+  --cdv-card-dark: #1B1816;
+  --cdv-elevated-light: #FFFFFF;
+  --cdv-elevated-dark: #24201D;
+  --cdv-border-light: #E4DDD0;
+  --cdv-border-dark: #332D28;
+
+  --cdv-text-primary-light: #261B14;
+  --cdv-text-primary-dark: #F2ECE1;
+  --cdv-text-secondary-light: #685A4E;
+  --cdv-text-secondary-dark: #A99B8C;
+  --cdv-text-tertiary-light: #8F8173;
+  --cdv-text-tertiary-dark: #7D7063;
+
+  --cdv-cinnabar: #B5533C;
+  --cdv-cinnabar-text-light: #A3422B;
+  --cdv-cinnabar-text-dark: #DC7E63;
+  --cdv-amber-light: #C4A86C;
+  --cdv-amber-dark: #D4B97D;
+  --cdv-amber-text-light: #7D5D24;
+  --cdv-amber-text-dark: #D4B97D;
+  --cdv-bamboo-text-light: #3E6B5B;
+  --cdv-bamboo-text-dark: #6FA692;
+  --cdv-indigo-text-light: #44627E;
+  --cdv-indigo-text-dark: #86A7C7;
+  --cdv-lotus-text-light: #964C49;
+  --cdv-lotus-text-dark: #E2AAA6;
+  --cdv-on-accent-light: #FFFFFF;
+  --cdv-on-accent-dark: #181412;
+
+  --cdv-bg: var(--cdv-bg-light);
+  --cdv-card: var(--cdv-card-light);
+  --cdv-elevated: var(--cdv-elevated-light);
+  --cdv-border: var(--cdv-border-light);
+  --cdv-text: var(--cdv-text-primary-light);
+  --cdv-text-secondary: var(--cdv-text-secondary-light);
+  --cdv-text-tertiary: var(--cdv-text-tertiary-light);
+  --cdv-cinnabar-text: var(--cdv-cinnabar-text-light);
+  --cdv-amber: var(--cdv-amber-light);
+  --cdv-amber-text: var(--cdv-amber-text-light);
+  --cdv-bamboo-text: var(--cdv-bamboo-text-light);
+  --cdv-indigo-text: var(--cdv-indigo-text-light);
+  --cdv-lotus-text: var(--cdv-lotus-text-light);
+  --cdv-on-accent: var(--cdv-on-accent-light);
+
+  --cdv-poem-font: "Newsreader", Georgia, "Times New Roman", serif;
+  --cdv-poem-size-offset: 0px;
+  --cdv-ui-font: "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  @media (prefers-color-scheme: dark) {
+    --cdv-bg: var(--cdv-bg-dark);
+    --cdv-card: var(--cdv-card-dark);
+    --cdv-elevated: var(--cdv-elevated-dark);
+    --cdv-border: var(--cdv-border-dark);
+    --cdv-text: var(--cdv-text-primary-dark);
+    --cdv-text-secondary: var(--cdv-text-secondary-dark);
+    --cdv-text-tertiary: var(--cdv-text-tertiary-dark);
+    --cdv-cinnabar-text: var(--cdv-cinnabar-text-dark);
+    --cdv-amber: var(--cdv-amber-dark);
+    --cdv-amber-text: var(--cdv-amber-text-dark);
+    --cdv-bamboo-text: var(--cdv-bamboo-text-dark);
+    --cdv-indigo-text: var(--cdv-indigo-text-dark);
+    --cdv-lotus-text: var(--cdv-lotus-text-dark);
+    --cdv-on-accent: var(--cdv-on-accent-dark);
+  }
+
+  &:has(> head > meta[name="color-scheme"][content="dark"]) {
+    color-scheme: dark;
+    --cdv-bg: var(--cdv-bg-dark);
+    --cdv-card: var(--cdv-card-dark);
+    --cdv-elevated: var(--cdv-elevated-dark);
+    --cdv-border: var(--cdv-border-dark);
+    --cdv-text: var(--cdv-text-primary-dark);
+    --cdv-text-secondary: var(--cdv-text-secondary-dark);
+    --cdv-text-tertiary: var(--cdv-text-tertiary-dark);
+    --cdv-cinnabar-text: var(--cdv-cinnabar-text-dark);
+    --cdv-amber: var(--cdv-amber-dark);
+    --cdv-amber-text: var(--cdv-amber-text-dark);
+    --cdv-bamboo-text: var(--cdv-bamboo-text-dark);
+    --cdv-indigo-text: var(--cdv-indigo-text-dark);
+    --cdv-lotus-text: var(--cdv-lotus-text-dark);
+    --cdv-on-accent: var(--cdv-on-accent-dark);
+  }
+
+  &:has(> head > meta[name="color-scheme"][content="light"]) {
+    color-scheme: light;
+    --cdv-bg: var(--cdv-bg-light);
+    --cdv-card: var(--cdv-card-light);
+    --cdv-elevated: var(--cdv-elevated-light);
+    --cdv-border: var(--cdv-border-light);
+    --cdv-text: var(--cdv-text-primary-light);
+    --cdv-text-secondary: var(--cdv-text-secondary-light);
+    --cdv-text-tertiary: var(--cdv-text-tertiary-light);
+    --cdv-cinnabar-text: var(--cdv-cinnabar-text-light);
+    --cdv-amber: var(--cdv-amber-light);
+    --cdv-amber-text: var(--cdv-amber-text-light);
+    --cdv-bamboo-text: var(--cdv-bamboo-text-light);
+    --cdv-indigo-text: var(--cdv-indigo-text-light);
+    --cdv-lotus-text: var(--cdv-lotus-text-light);
+    --cdv-on-accent: var(--cdv-on-accent-light);
+  }
+
+  @supports (color: light-dark(white, black)) {
+    --cdv-bg: light-dark(var(--cdv-bg-light), var(--cdv-bg-dark));
+    --cdv-card: light-dark(var(--cdv-card-light), var(--cdv-card-dark));
+    --cdv-elevated: light-dark(var(--cdv-elevated-light), var(--cdv-elevated-dark));
+    --cdv-border: light-dark(var(--cdv-border-light), var(--cdv-border-dark));
+    --cdv-text: light-dark(var(--cdv-text-primary-light), var(--cdv-text-primary-dark));
+    --cdv-text-secondary: light-dark(var(--cdv-text-secondary-light), var(--cdv-text-secondary-dark));
+    --cdv-text-tertiary: light-dark(var(--cdv-text-tertiary-light), var(--cdv-text-tertiary-dark));
+    --cdv-cinnabar-text: light-dark(var(--cdv-cinnabar-text-light), var(--cdv-cinnabar-text-dark));
+    --cdv-amber: light-dark(var(--cdv-amber-light), var(--cdv-amber-dark));
+    --cdv-amber-text: light-dark(var(--cdv-amber-text-light), var(--cdv-amber-text-dark));
+    --cdv-bamboo-text: light-dark(var(--cdv-bamboo-text-light), var(--cdv-bamboo-text-dark));
+    --cdv-indigo-text: light-dark(var(--cdv-indigo-text-light), var(--cdv-indigo-text-dark));
+    --cdv-lotus-text: light-dark(var(--cdv-lotus-text-light), var(--cdv-lotus-text-dark));
+    --cdv-on-accent: light-dark(var(--cdv-on-accent-light), var(--cdv-on-accent-dark));
+  }
+
+  accent-color: var(--cdv-cinnabar-text);
+  scrollbar-color: var(--cdv-border) transparent;
+}
+
+:root[data-force-theme="dark"] {
+  color-scheme: dark;
+  --cdv-bg-dark: #0D1016;
+  --cdv-card-dark: #151922;
+  --cdv-elevated-dark: #1D222E;
+  --cdv-border-dark: #2A3142;
+  --cdv-bg: #0D1016;
+  --cdv-card: #151922;
+  --cdv-elevated: #1D222E;
+  --cdv-border: #2A3142;
+  --cdv-text: #EBE6DD;
+  --cdv-text-secondary: #A6A9B6;
+  --cdv-text-tertiary: #767B8C;
+  --cdv-cinnabar-text: #DC7E63;
+  --cdv-amber: #D4B97D;
+  --cdv-amber-text: #D4B97D;
+  --cdv-bamboo-text: #72AE9A;
+  --cdv-indigo-text: #8CAFD4;
+  --cdv-lotus-text: #E2AAA6;
+  --cdv-on-accent: #13151B;
+}
+
+html,
+body {
+  background-color: var(--cdv-bg);
+  color: var(--cdv-text);
+  font-family: var(--cdv-ui-font);
+  line-height: 1.65;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, .cdv-display {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.visually-hidden:where(:not(:focus-within, :active)) {
+  position: absolute !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 999;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--cdv-cinnabar-text);
+  color: var(--cdv-on-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+:where(a:any-link, button, input, select, textarea, [tabindex="0"]):focus-visible {
+  outline: 2px solid var(--cdv-cinnabar-text);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  button,
+  [role="button"],
+  .touch-target {
+    min-block-size: 44px;
+  }
+}
+
+/* Editorial Surfaces */
+.cdv-surface {
+  background-color: var(--cdv-card);
+  border: 1px solid var(--cdv-border);
+  border-radius: 1rem;
+}
+
+.cdv-card {
+  background-color: var(--cdv-card);
+  border: 1px solid var(--cdv-border);
+  border-radius: 1rem;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.cdv-card-interactive:hover {
+  border-color: color-mix(in srgb, var(--cdv-cinnabar-text) 45%, var(--cdv-border));
+  box-shadow: 0 8px 24px -10px rgba(38, 27, 20, 0.12);
+}
+
+.cdv-elevated {
+  background-color: var(--cdv-elevated);
+  border: 1px solid var(--cdv-border);
+  border-radius: 0.75rem;
+}
+
+.cdv-prose {
+  max-inline-size: 65ch;
+}
+
+/* Poetic Typography */
+.cdv-poem {
+  font-family: var(--cdv-poem-font);
+  line-height: 1.65;
+  letter-spacing: -0.005em;
+  padding-top: 2px;
+}
+
+.cdv-poem-hero {
+  font-size: calc(clamp(1.5rem, 2.8vw, 2.25rem) + var(--cdv-poem-size-offset));
+  line-height: 1.5;
+}
+
+.cdv-poem-regular {
+  font-size: calc(1.125rem + var(--cdv-poem-size-offset));
+}
+
+.cdv-lucbat-6 {
+  padding-inline-start: 1.35rem;
+}
+
+.cdv-poem-reading {
+  text-align: var(--cdv-poem-align, center);
+}
+
+[data-poem-align="center"] .cdv-poem-reading .cdv-lucbat-6,
+[data-poem-align="right"] .cdv-poem-reading .cdv-lucbat-6 {
+  padding-inline-start: 0;
+}
+
+.cdv-prose-reading {
+  text-align: var(--cdv-poem-align, center);
+}
+
+[data-poem-align="center"] .cdv-prose-reading {
+  margin-inline: auto;
+}
+
+[data-poem-align="right"] .cdv-prose-reading {
+  margin-inline-start: auto;
+}
+
+/* Web Buttons */
+.cdv-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1.05rem;
+  border-radius: 0.625rem;
+  background-color: var(--cdv-cinnabar-text);
+  color: var(--cdv-on-accent);
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s ease, transform 0.12s ease;
+}
+
+.cdv-btn-primary:hover {
+  opacity: 0.92;
+}
+
+.cdv-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.625rem;
+  background-color: var(--cdv-elevated);
+  color: var(--cdv-text);
+  border: 1px solid var(--cdv-border);
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.cdv-btn-secondary:hover {
+  background-color: color-mix(in srgb, var(--cdv-border) 30%, var(--cdv-elevated));
+  border-color: color-mix(in srgb, var(--cdv-text-secondary) 40%, var(--cdv-border));
+}
+
+/* Editorial Hairline Grid / Cards */
+.cdv-editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19.5rem), 1fr));
+  gap: 1.125rem;
+}
+
+.cdv-editorial-grid > * {
+  min-width: 0;
+}
+
+.cdv-editorial-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.875rem;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Flexible Masonry Waterfall for variable-length Vietnamese folk verses */
+.cdv-masonry {
+  columns: 1;
+  column-gap: 1.125rem;
+  padding: 2px;
+}
+
+@media (min-width: 640px) {
+  .cdv-masonry {
+    columns: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cdv-masonry {
+    columns: 3;
+  }
+}
+
+.cdv-masonry > * {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-bottom: 1.125rem;
+  width: 100%;
+}
+
+/* Responsive Top Navbar (one semantic tree, ResizeObserver toggles .is-wide) */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background-color: color-mix(in srgb, var(--cdv-bg) 90%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--cdv-border);
+}
+
+.header-inner {
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 3vw, 2rem);
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-inner > * {
+  flex-shrink: 0;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  margin-inline-start: auto;
+}
+
+.site-header.is-measuring * {
+  transition: none !important;
+}
+
+.site-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  background-color: var(--cdv-card);
+  border: 1px solid var(--cdv-border);
+  border-radius: 0.875rem;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
+}
+
+.site-menu[popover] {
+  position: fixed;
+  inset: auto;
+  inset-block-start: 4.5rem;
+  inset-inline-end: 1rem;
+  inline-size: min(85dvw, 20rem);
+  max-block-size: calc(100dvh - 6rem);
+  overflow: auto;
+}
+
+@supports (anchor-name: --menu-button) {
+  .site-header .menu-button {
+    anchor-name: --menu-button;
+  }
+  .site-header .site-menu[popover] {
+    inset-block-start: anchor(--menu-button bottom);
+    margin-block-start: 0.5rem;
+  }
+}
+
+.site-menu:is(:popover-open, .\:popover-open) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+@supports not selector(:popover-open) {
+  .site-menu[popover]:not(.\:popover-open) {
+    display: none;
+  }
+}
+
+.site-header.is-wide .menu-button {
+  display: none;
+}
+
+.site-header.is-wide .nav-more-flat {
+  display: none;
+}
+
+.site-header:not(.is-wide) .nav-more-desktop {
+  display: none;
+}
+
+.site-header.is-wide .site-menu {
+  position: static;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.more-nav-popover[popover] {
+  position: fixed;
+  inset: auto;
+  inset-block-start: 4.25rem;
+  inset-inline-end: max(1rem, 12vw);
+  inline-size: min(88vw, 18.5rem);
+  background-color: var(--cdv-card);
+  border: 1px solid var(--cdv-border);
+  border-radius: 0.875rem;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+  color: var(--cdv-text);
+  z-index: 40;
+}
+
+@supports (anchor-name: --more-btn) {
+  #more-menu-btn {
+    anchor-name: --more-btn;
+  }
+  .more-nav-popover[popover] {
+    position-anchor: --more-btn;
+    inset-block-start: anchor(bottom);
+    inset-inline-start: anchor(left);
+    inset-inline-end: auto;
+    margin-block-start: 0.5rem;
+  }
+}
+
+.more-nav-popover:is(:popover-open, .\:popover-open) {
+  display: block;
+}
+
+@supports not selector(:popover-open) {
+  .more-nav-popover[popover]:not(.\:popover-open) {
+    display: none;
+  }
+}
+
+.site-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.42rem 0.72rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--cdv-text-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.site-nav-link:hover {
+  color: var(--cdv-text);
+  background-color: color-mix(in srgb, var(--cdv-border) 35%, transparent);
+}
+
+.site-nav-link[aria-current="page"],
+.site-nav-link[aria-current="true"] {
+  color: var(--cdv-cinnabar-text);
+  font-weight: 600;
+  background-color: color-mix(in srgb, var(--cdv-cinnabar-text) 10%, transparent);
+}
+
+.site-header.is-wide .site-nav-link[aria-current="page"]::after,
+.site-header.is-wide .site-nav-link[aria-current="true"]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0.72rem;
+  inset-block-end: 0.15rem;
+  block-size: 2px;
+  border-radius: 2px;
+  background-color: var(--cdv-cinnabar-text);
+}
+
+/* Native <dialog> */
+dialog.cdv-dialog {
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--cdv-border);
+  border-radius: 1rem;
+  background-color: var(--cdv-card);
+  color: var(--cdv-text);
+  max-width: min(94vw, 38rem);
+  width: 100%;
+  max-height: 90dvh;
+  overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+}
+
+dialog.cdv-dialog::backdrop {
+  background-color: rgba(18, 16, 16, 0.56);
+  backdrop-filter: blur(4px);
+}
+
+/* Native Popover for Glossary */
+@supports (anchor-name: --a) {
+  [popover].cdv-popover {
+    inset: auto;
+    margin: unset;
+  }
+}
+
+[popover].cdv-popover {
+  background-color: var(--cdv-elevated);
+  color: var(--cdv-text);
+  border: 1px solid var(--cdv-border);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  max-width: min(88vw, 22rem);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+}
+
+[popover].cdv-popover:is(:popover-open, .\:popover-open) {
+  display: block;
+}
+
+@supports not selector(:popover-open) {
+  [popover].cdv-popover:not(.\:popover-open) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cdv-animate-pop {
+    animation: cdvPop 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .cdv-animate-shake {
+    animation: cdvShake 0.45s ease-in-out infinite;
+  }
+}
+
+@keyframes cdvPop {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cdvShake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}

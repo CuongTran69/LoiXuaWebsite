@@ -1,0 +1,12 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import QuizApp from '@/components/QuizApp';
+---
+
+<BaseLayout
+  title="Đố vui nối vế Ca dao & Tục ngữ (20 câu) | Lời Xưa"
+  description="Thử tài trí nhớ ca dao, tục ngữ Việt Nam với 20 câu đố vui nối vế đếm ngược thời gian."
+  canonicalPath="/do-vui"
+>
+  <QuizApp client:load mode="classic" />
+</BaseLayout>

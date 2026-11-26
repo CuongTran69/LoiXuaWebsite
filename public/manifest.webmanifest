@@ -1,0 +1,18 @@
+{
+  "name": "Lời Xưa — Ca dao, Tục ngữ & Thành ngữ Việt",
+  "short_name": "Lời Xưa",
+  "description": "Kho tàng 949+ ca dao, tục ngữ, thành ngữ Việt Nam có giải nghĩa, giọng đọc studio, gieo quẻ, đố vui và đấu nối vế.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F5F0E8",
+  "theme_color": "#B5533C",
+  "lang": "vi",
+  "icons": [
+    {
+      "src": "/icons/app-icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

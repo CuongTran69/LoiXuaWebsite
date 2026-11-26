@@ -1,0 +1,55 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { datasetVersion, sayings, sources } from '@/data/catalog';
+---
+
+<BaseLayout
+  title="Nguồn dữ liệu, Bản quyền & Quyền riêng tư | Lời Xưa"
+  description="Thông tin nguồn dữ liệu ca dao tục ngữ (Wikiquote CC BY-SA 4.0), cam kết quyền riêng tư và không quảng cáo trong ứng dụng Lời Xưa."
+  canonicalPath="/nguon-du-lieu"
+>
+  <div class="space-y-6 max-w-3xl">
+    <h1 class="text-2xl sm:text-3xl font-bold m-0" style="font-family: var(--cdv-poem-font);">
+      Nguồn dữ liệu &amp; Quyền riêng tư
+    </h1>
+
+    <section class="cdv-card p-6 space-y-3">
+      <h2 class="text-lg font-bold m-0">Phiên bản kho dữ liệu: {datasetVersion} ({sayings.length} câu)</h2>
+      <p class="text-sm leading-relaxed m-0" style="color: var(--cdv-text-secondary);">
+        Nội dung văn bản dân gian trong Lời Xưa được kế thừa và chuẩn hoá từ cộng đồng Wikiquote tiếng Việt theo giấy phép
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.vi" target="_blank" rel="noopener noreferrer" class="underline" style="color: var(--cdv-bamboo-text);">
+          Creative Commons Attribution-ShareAlike 4.0 (CC BY-SA 4.0)
+        </a>. Phần giải nghĩa, từ cổ, ví dụ minh hoạ do Ban biên soạn Lời Xưa thực hiện theo CC BY 4.0.
+      </p>
+
+      <div class="space-y-3 pt-2">
+        {sources.map((src) => (
+          <div class="cdv-elevated p-4 space-y-1">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <p class="font-bold text-sm m-0">{src.name}</p>
+              <span class="text-xs font-semibold px-2 py-0.5 rounded-full" style="background-color: var(--cdv-card); color: var(--cdv-cinnabar-text);">
+                {src.license}
+              </span>
+            </div>
+            {src.author && <p class="text-xs m-0" style="color: var(--cdv-text-secondary);">Tác giả: {src.author}</p>}
+            <p class="text-xs m-0" style="color: var(--cdv-text-secondary);">{src.note}</p>
+            {src.url && (
+              <a href={src.url} target="_blank" rel="noopener noreferrer" class="text-xs underline inline-block mt-1" style="color: var(--cdv-cinnabar-text);">
+                Truy cập nguồn →
+              </a>
+            )}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="cdv-card p-6 space-y-2.5">
+      <h2 class="text-lg font-bold m-0">Cam kết quyền riêng tư</h2>
+      <ul class="text-sm space-y-1.5 pl-5 m-0" style="color: var(--cdv-text-secondary);">
+        <li><strong>Local-first:</strong> Danh sách yêu thích, sổ tay, cảm nhận và chuỗi ngày đọc được lưu cục bộ trên thiết bị/trình duyệt của bạn.</li>
+        <li><strong>Đấu nối vế 1v1:</strong> Khi chơi online, hệ thống dùng Firebase Anonymous Authentication (không yêu cầu tài khoản, email hay số điện thoại) và tự động hết hạn phòng sau 2 giờ.</li>
+        <li><strong>Ứng dụng di động:</strong> Cam kết không gắn quảng cáo và không theo dõi chéo người dùng.</li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,12 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import QuizApp from '@/components/QuizApp';
+---
+
+<BaseLayout
+  title="Đố nhanh mỗi ngày (5 câu) | Lời Xưa"
+  description="Thử thách 5 câu nối vế ca dao, tục ngữ cố định mỗi ngày — đồng bộ cùng ứng dụng Lời Xưa trên iOS và Android."
+  canonicalPath="/do-vui-hom-nay"
+>
+  <QuizApp client:load mode="daily" />
+</BaseLayout>

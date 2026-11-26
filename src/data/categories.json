@@ -1,0 +1,109 @@
+{
+  "categories": [
+    {
+      "slug": "tinh-yeu",
+      "name": "Tình yêu đôi lứa",
+      "description": "Tâm tư, hò hẹn, ân tình duyên lứa và nỗi niềm tương tư",
+      "order": 1,
+      "icon": "heart.fill"
+    },
+    {
+      "slug": "gia-dinh",
+      "name": "Gia đình & Cha mẹ",
+      "description": "Công cha nghĩa mẹ, tình nghĩa vợ chồng, đạo hiếu anh em",
+      "order": 2,
+      "icon": "house.fill"
+    },
+    {
+      "slug": "que-huong",
+      "name": "Quê hương & Đất nước",
+      "description": "Danh lam thắng cảnh, di tích lịch sử và tình yêu xứ sở",
+      "order": 3,
+      "icon": "map.fill"
+    },
+    {
+      "slug": "dao-ly",
+      "name": "Đạo lý & Làm người",
+      "description": "Nhân nghĩa, thủy chung, ơn sâu nghĩa nặng, khiêm nhường",
+      "order": 4,
+      "icon": "sparkles"
+    },
+    {
+      "slug": "ban-be-thay-tro",
+      "name": "Thầy trò & Bạn bè",
+      "description": "Tôn sư trọng đạo, nghĩa bạn tri kỷ, tình làng nghĩa xóm",
+      "order": 5,
+      "icon": "person.2.fill"
+    },
+    {
+      "slug": "lao-dong",
+      "name": "Lao động & Nghề nghiệp",
+      "description": "Cần cù chăm chỉ, quý trọng thành quả và các làng nghề cổ truyền",
+      "order": 6,
+      "icon": "hammer.fill"
+    },
+    {
+      "slug": "kinh-nghiem-nong-nghiep",
+      "name": "Thời vụ & Nông nghiệp",
+      "description": "Kinh nghiệm đồng áng, gieo trồng gặt hái và mùa màng tươi tốt",
+      "order": 7,
+      "icon": "leaf.fill"
+    },
+    {
+      "slug": "hoc-tap",
+      "name": "Học tập & Trí tuệ",
+      "description": "Ý chí rèn luyện, học hỏi điều hay và sự kiên trì bền bỉ",
+      "order": 8,
+      "icon": "book.fill"
+    },
+    {
+      "slug": "ung-xu",
+      "name": "Giao tiếp & Ứng xử",
+      "description": "Lời ăn tiếng nói, khiêm cung, hòa nhã và đối nhân xử thế khéo léo",
+      "order": 9,
+      "icon": "bubble.left.and.bubble.right.fill"
+    },
+    {
+      "slug": "thoi-tiet",
+      "name": "Thời tiết & Thiên nhiên",
+      "description": "Trăng sao, mây gió, quy luật đất trời và dự báo dân gian",
+      "order": 10,
+      "icon": "cloud.sun.fill"
+    },
+    {
+      "slug": "cham-biem",
+      "name": "Châm biếm & Trào phúng",
+      "description": "Đả kích thói hư tật xấu, tiếng cười lạc quan và hóm hỉnh dân gian",
+      "order": 11,
+      "icon": "theatermasks.fill"
+    },
+    {
+      "slug": "am-thuc-phong-tuc",
+      "name": "Ẩm thực & Phong tục",
+      "description": "Món ngon ba miền, hội hè đình đám và phong vị truyền thống",
+      "order": 12,
+      "icon": "fork.knife"
+    },
+    {
+      "slug": "lich-su-danh-nhan",
+      "name": "Lịch sử & Danh nhân",
+      "description": "Chiến tích oai hùng, tiền nhân dựng nước và hào khí non sông",
+      "order": 13,
+      "icon": "shield.fill"
+    },
+    {
+      "slug": "triet-ly-cuoc-song",
+      "name": "Thế sự & Đời người",
+      "description": "Quy luật được mất, thị phi trần gian và nhân tình thế thái",
+      "order": 14,
+      "icon": "hourglass"
+    },
+    {
+      "slug": "dong-dao-tuoi-tho",
+      "name": "Đồng dao & Tuổi thơ",
+      "description": "Trò chơi dân gian, câu vè câu hát ru và ký ức hồn nhiên thuở nhỏ",
+      "order": 15,
+      "icon": "figure.play"
+    }
+  ]
+}

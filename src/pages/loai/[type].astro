@@ -1,0 +1,158 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getSayingsByType, getSayingSlug } from '@/data/catalog';
+import { TYPE_LABELS, type SayingType } from '@/core/types';
+import { searchNormalized } from '@/core/vietnamese';
+
+export function getStaticPaths() {
+  const types: SayingType[] = ['ca-dao', 'tuc-ngu', 'thanh-ngu'];
+  return types.map((type) => ({
+    params: { type },
+    props: { type },
+  }));
+}
+
+interface Props {
+  type: SayingType;
+}
+
+const { type } = Astro.props;
+const label = TYPE_LABELS[type];
+const list = getSayingsByType(type);
+---
+
+<BaseLayout
+  title={`Kho tàng ${label} Việt Nam (${list.length} câu có giải nghĩa) | Lời Xưa`}
+  description={`Tuyển tập ${list.length} câu ${label.toLowerCase()} Việt Nam chọn lọc, đầy đủ giải nghĩa, nguồn gốc và giọng đọc chuẩn.`}
+  canonicalPath={`/loai/${type}`}
+>
+  <div class="space-y-8">
+    <nav aria-label="Đường dẫn" class="text-xs flex items-center gap-1.5" style="color: var(--cdv-text-secondary);">
+      <a href="/" class="hover:underline no-underline" style="color: inherit;">Trang chủ</a>
+      <span>/</span>
+      <a href="/kham-pha" class="hover:underline no-underline" style="color: inherit;">Kho tàng</a>
+      <span>/</span>
+      <span>{label}</span>
+    </nav>
+
+    <header class="cdv-surface p-6 sm:p-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div class="space-y-1.5">
+        <span class="text-xs font-bold uppercase tracking-wider" style="color: var(--cdv-cinnabar-text);">
+          Thể loại · {list.length} câu
+        </span>
+        <h1 class="text-2xl sm:text-3xl font-bold m-0" style="font-family: var(--cdv-poem-font);">{label} Việt Nam</h1>
+        <p class="text-sm m-0" style="color: var(--cdv-text-secondary);">
+          Tuyển tập đã chuẩn hoá văn bản và biên soạn giải nghĩa.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2 items-center">
+        <input
+          id="type-filter-input"
+          type="search"
+          placeholder={`Lọc nhanh trong ${label}...`}
+          aria-label={`Lọc nhanh trong ${label}`}
+          class="px-3 py-2 rounded-lg border text-xs w-60"
+          style="background-color: var(--cdv-elevated); border-color: var(--cdv-border); color: var(--cdv-text);"
+        />
+        <a href="/tim-kiem" class="cdv-btn-secondary text-xs">Tìm kiếm toàn kho</a>
+      </div>
+    </header>
+
+    <div class="cdv-masonry" id="type-archive-grid">
+      {list.map((item) => (
+        <a
+          href={`/cau/${getSayingSlug(item)}`}
+          data-search={searchNormalized(`${item.text} ${item.meaning ?? ''}`)}
+          class="type-archive-card cdv-card cdv-card-interactive cdv-editorial-card p-5 no-underline"
+          style="color: var(--cdv-text);"
+        >
+          <p class="cdv-poem text-base font-medium m-0 whitespace-pre-line">{item.text}</p>
+          {item.meaning && (
+            <p class="text-xs m-0 line-clamp-2 pt-2.5 border-t" style="border-color: var(--cdv-border); color: var(--cdv-text-secondary);">{item.meaning}</p>
+          )}
+        </a>
+      ))}
+    </div>
+
+    <nav id="type-pagination" aria-label="Phân trang danh sách" class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t" style="border-color: var(--cdv-border);">
+      <p id="type-page-info" class="text-xs m-0 tabular-nums" style="color: var(--cdv-text-secondary);"></p>
+      <div class="flex items-center gap-2">
+        <button type="button" id="type-prev-btn" class="cdv-btn-secondary text-xs py-1.5 px-3">← Trước</button>
+        <button type="button" id="type-next-btn" class="cdv-btn-secondary text-xs py-1.5 px-3">Sau →</button>
+        <button type="button" id="type-all-btn" class="cdv-btn-secondary text-xs py-1.5 px-3">Xem tất cả</button>
+      </div>
+    </nav>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var PAGE_SIZE = 24;
+      var page = 0;
+      var showAll = false;
+      var input = document.getElementById('type-filter-input');
+      var cards = Array.from(document.querySelectorAll('.type-archive-card'));
+      var nav = document.getElementById('type-pagination');
+      var info = document.getElementById('type-page-info');
+      var prevBtn = document.getElementById('type-prev-btn');
+      var nextBtn = document.getElementById('type-next-btn');
+      var allBtn = document.getElementById('type-all-btn');
+
+      function strip(str) {
+        return str.normalize('NFC').toLowerCase().replace(/đ/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+      }
+
+      function render() {
+        var q = strip(input?.value || '');
+        var matched = [];
+        cards.forEach(function (card) {
+          var ok = !q || (card.getAttribute('data-search') || '').includes(q);
+          if (ok) matched.push(card);
+          else card.style.display = 'none';
+        });
+
+        var totalPages = Math.max(1, Math.ceil(matched.length / PAGE_SIZE));
+        if (page >= totalPages) page = totalPages - 1;
+        var start = showAll ? 0 : page * PAGE_SIZE;
+        var end = showAll ? matched.length : start + PAGE_SIZE;
+
+        matched.forEach(function (card, idx) {
+          card.style.display = (idx >= start && idx < end) ? '' : 'none';
+        });
+
+        if (nav) nav.style.display = matched.length <= PAGE_SIZE && !showAll ? 'none' : 'flex';
+        if (info) {
+          info.textContent = showAll
+            ? 'Đang hiển thị tất cả ' + matched.length + ' câu'
+            : 'Hiển thị ' + Math.min(matched.length, start + 1) + '–' + Math.min(matched.length, end) + ' / ' + matched.length + ' câu (Trang ' + (page + 1) + '/' + totalPages + ')';
+        }
+        if (prevBtn) prevBtn.disabled = showAll || page <= 0;
+        if (nextBtn) nextBtn.disabled = showAll || page >= totalPages - 1;
+        if (allBtn) allBtn.textContent = showAll ? 'Thu gọn 24 câu/trang' : 'Xem tất cả';
+      }
+
+      input?.addEventListener('input', function () {
+        page = 0;
+        render();
+      });
+      prevBtn?.addEventListener('click', function () {
+        if (page > 0) {
+          page--;
+          render();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+      nextBtn?.addEventListener('click', function () {
+        page++;
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      allBtn?.addEventListener('click', function () {
+        showAll = !showAll;
+        page = 0;
+        render();
+      });
+
+      render();
+    })();
+  </script>
+</BaseLayout>

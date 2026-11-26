@@ -1,0 +1,20 @@
+---
+import { shouldIndentVerseLine, splitPoemLines } from '@/core/vietnamese';
+
+interface Props {
+  text: string;
+  hero?: boolean;
+  center?: boolean;
+}
+
+const { text, hero = false, center = false } = Astro.props;
+const lines = splitPoemLines(text);
+---
+
+<div class={`cdv-poem ${hero ? 'cdv-poem-hero' : 'cdv-poem-regular'} ${center ? 'text-center' : 'text-left'} space-y-2`}>
+  {lines.map((line, idx) => (
+    <p class={`m-0 ${!center && shouldIndentVerseLine(lines, idx) ? 'cdv-lucbat-6' : ''}`}>
+      {line}
+    </p>
+  ))}
+</div>

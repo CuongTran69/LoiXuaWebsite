@@ -1,0 +1,3 @@
+# Legacy or shorthand paths
+/d/:code   /dau?code=:code   302
+/d/*       /dau              302

@@ -1,0 +1,178 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { categories, getSayingsByCategory, getSayingSlug } from '@/data/catalog';
+import { TYPE_LABELS, type SayingCategory } from '@/core/types';
+import { searchNormalized } from '@/core/vietnamese';
+
+export function getStaticPaths() {
+  return categories.map((category) => ({
+    params: { slug: category.slug },
+    props: { category },
+  }));
+}
+
+interface Props {
+  category: SayingCategory;
+}
+
+const { category } = Astro.props;
+const list = getSayingsByCategory(category.slug);
+---
+
+<BaseLayout
+  title={`${category.name} — Ca dao, Tục ngữ & Thành ngữ | Lời Xưa`}
+  description={`Tổng hợp ${list.length} câu ca dao, tục ngữ, thành ngữ chủ đề ${category.name}: ${category.description}`}
+  canonicalPath={`/chu-de/${category.slug}`}
+>
+  <div class="space-y-8">
+    <nav aria-label="Đường dẫn" class="text-xs flex items-center gap-1.5" style="color: var(--cdv-text-secondary);">
+      <a href="/" class="hover:underline no-underline" style="color: inherit;">Trang chủ</a>
+      <span>/</span>
+      <a href="/kham-pha" class="hover:underline no-underline" style="color: inherit;">Kho tàng</a>
+      <span>/</span>
+      <span>{category.name}</span>
+    </nav>
+
+    <header class="cdv-surface p-6 sm:p-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div class="space-y-2">
+        <span class="text-xs font-bold uppercase tracking-wider" style="color: var(--cdv-cinnabar-text);">
+          Chủ đề · {list.length} câu
+        </span>
+        <h1 class="text-2xl sm:text-3xl font-bold m-0" style="font-family: var(--cdv-poem-font);">{category.name}</h1>
+        <p class="text-sm m-0 cdv-prose" style="color: var(--cdv-text-secondary);">{category.description}</p>
+      </div>
+
+      <div class="flex flex-wrap gap-2 items-center">
+        <input
+          id="archive-filter-input"
+          type="search"
+          placeholder="Lọc nhanh trong chủ đề..."
+          aria-label="Lọc nhanh trong chủ đề"
+          class="px-3 py-2 rounded-lg border text-xs w-56"
+          style="background-color: var(--cdv-elevated); border-color: var(--cdv-border); color: var(--cdv-text);"
+        />
+        <select
+          id="archive-type-select"
+          aria-label="Lọc theo loại"
+          class="px-3 py-2 rounded-lg border text-xs"
+          style="background-color: var(--cdv-elevated); border-color: var(--cdv-border); color: var(--cdv-text);"
+        >
+          <option value="all">Tất cả loại</option>
+          <option value="ca-dao">Ca dao</option>
+          <option value="tuc-ngu">Tục ngữ</option>
+          <option value="thanh-ngu">Thành ngữ</option>
+        </select>
+      </div>
+    </header>
+
+    <div id="archive-grid" class="cdv-masonry">
+      {list.map((item) => (
+        <a
+          href={`/cau/${getSayingSlug(item)}`}
+          data-type={item.type}
+          data-search={searchNormalized(`${item.text} ${item.meaning ?? ''}`)}
+          class="archive-card cdv-card cdv-card-interactive cdv-editorial-card p-5 no-underline"
+          style="color: var(--cdv-text);"
+        >
+          <div class="space-y-2.5 min-w-0">
+            <span class="block text-[11px] font-bold uppercase tracking-wider" style="color: var(--cdv-cinnabar-text);">
+              {TYPE_LABELS[item.type]}
+            </span>
+            <p class="cdv-poem text-base font-medium m-0 whitespace-pre-line">{item.text}</p>
+          </div>
+          {item.meaning && (
+            <p class="text-xs m-0 line-clamp-2 pt-2.5 border-t" style="border-color: var(--cdv-border); color: var(--cdv-text-secondary);">{item.meaning}</p>
+          )}
+        </a>
+      ))}
+    </div>
+
+    <nav id="archive-pagination" aria-label="Phân trang chủ đề" class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t" style="border-color: var(--cdv-border);">
+      <p id="archive-page-info" class="text-xs m-0 tabular-nums" style="color: var(--cdv-text-secondary);"></p>
+      <div class="flex items-center gap-2">
+        <button type="button" id="archive-prev-btn" class="cdv-btn-secondary text-xs py-1.5 px-3">← Trước</button>
+        <button type="button" id="archive-next-btn" class="cdv-btn-secondary text-xs py-1.5 px-3">Sau →</button>
+        <button type="button" id="archive-all-btn" class="cdv-btn-secondary text-xs py-1.5 px-3">Xem tất cả</button>
+      </div>
+    </nav>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var PAGE_SIZE = 24;
+      var page = 0;
+      var showAll = false;
+      var input = document.getElementById('archive-filter-input');
+      var select = document.getElementById('archive-type-select');
+      var cards = Array.from(document.querySelectorAll('.archive-card'));
+      var nav = document.getElementById('archive-pagination');
+      var info = document.getElementById('archive-page-info');
+      var prevBtn = document.getElementById('archive-prev-btn');
+      var nextBtn = document.getElementById('archive-next-btn');
+      var allBtn = document.getElementById('archive-all-btn');
+
+      function strip(str) {
+        return str.normalize('NFC').toLowerCase().replace(/đ/g, 'd').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+      }
+
+      function apply() {
+        var q = strip(input?.value || '');
+        var t = select?.value || 'all';
+        var matched = [];
+        cards.forEach(function (card) {
+          var okType = t === 'all' || card.getAttribute('data-type') === t;
+          var okText = !q || (card.getAttribute('data-search') || '').includes(q);
+          if (okType && okText) matched.push(card);
+          else card.style.display = 'none';
+        });
+
+        var totalPages = Math.max(1, Math.ceil(matched.length / PAGE_SIZE));
+        if (page >= totalPages) page = totalPages - 1;
+        var start = showAll ? 0 : page * PAGE_SIZE;
+        var end = showAll ? matched.length : start + PAGE_SIZE;
+
+        matched.forEach(function (card, idx) {
+          card.style.display = (idx >= start && idx < end) ? '' : 'none';
+        });
+
+        if (nav) nav.style.display = matched.length <= PAGE_SIZE && !showAll ? 'none' : 'flex';
+        if (info) {
+          info.textContent = showAll
+            ? 'Đang hiển thị tất cả ' + matched.length + ' câu'
+            : 'Hiển thị ' + Math.min(matched.length, start + 1) + '–' + Math.min(matched.length, end) + ' / ' + matched.length + ' câu (Trang ' + (page + 1) + '/' + totalPages + ')';
+        }
+        if (prevBtn) prevBtn.disabled = showAll || page <= 0;
+        if (nextBtn) nextBtn.disabled = showAll || page >= totalPages - 1;
+        if (allBtn) allBtn.textContent = showAll ? 'Thu gọn 24 câu/trang' : 'Xem tất cả';
+      }
+
+      input?.addEventListener('input', function () {
+        page = 0;
+        apply();
+      });
+      select?.addEventListener('change', function () {
+        page = 0;
+        apply();
+      });
+      prevBtn?.addEventListener('click', function () {
+        if (page > 0) {
+          page--;
+          apply();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+      nextBtn?.addEventListener('click', function () {
+        page++;
+        apply();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      allBtn?.addEventListener('click', function () {
+        showAll = !showAll;
+        page = 0;
+        apply();
+      });
+
+      apply();
+    })();
+  </script>
+</BaseLayout>

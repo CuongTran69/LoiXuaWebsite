@@ -1,0 +1,73 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { categories, getSayingsByCategory, getSayingsByType, sayings } from '@/data/catalog';
+import { TYPE_LABELS, type SayingType } from '@/core/types';
+
+const types: SayingType[] = ['ca-dao', 'tuc-ngu', 'thanh-ngu'];
+---
+
+<BaseLayout
+  title="Kho tàng Ca dao, Tục ngữ & Thành ngữ | Lời Xưa"
+  description="Duyệt kho 949+ câu ca dao, tục ngữ, thành ngữ Việt Nam theo 15 chủ đề đời sống: Tình yêu, Gia đình, Đạo lý, Học tập, Thời tiết, Quê hương."
+  canonicalPath="/kham-pha"
+>
+  <div class="space-y-10">
+    <header class="border-b pb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4" style="border-color: var(--cdv-border);">
+      <div class="space-y-1.5">
+        <p class="text-xs font-bold uppercase tracking-wider m-0" style="color: var(--cdv-cinnabar-text);">
+          Thư mục lưu trữ
+        </p>
+        <h1 class="text-2xl sm:text-4xl font-bold m-0" style="font-family: var(--cdv-poem-font);">
+          Kho tàng {sayings.length} câu Lời Xưa
+        </h1>
+        <p class="text-sm m-0 cdv-prose" style="color: var(--cdv-text-secondary);">
+          Toàn bộ ca dao, tục ngữ, thành ngữ đã chuẩn hoá chính tả, kèm giải nghĩa và giọng đọc studio.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <a href="/tim-kiem" class="cdv-btn-primary text-xs">Tìm kiếm nâng cao</a>
+        <a href="/luot-tho" class="cdv-btn-secondary text-xs">Chế độ Lướt thơ</a>
+      </div>
+    </header>
+
+    <section class="space-y-4">
+      <h2 class="text-lg font-bold m-0">Phân loại theo thể loại</h2>
+      <div class="grid gap-4 sm:grid-cols-3">
+        {types.map((t) => {
+          const count = getSayingsByType(t).length;
+          return (
+            <a href={`/loai/${t}`} class="cdv-card cdv-card-interactive p-6 no-underline flex items-center justify-between" style="color: var(--cdv-text);">
+              <div>
+                <p class="font-bold text-xl m-0" style="font-family: var(--cdv-poem-font);">{TYPE_LABELS[t]}</p>
+                <p class="text-xs m-0 mt-1" style="color: var(--cdv-text-secondary);">Đọc toàn bộ tuyển tập</p>
+              </div>
+              <span class="text-lg font-bold tabular-nums px-3 py-1 rounded-lg" style="background-color: var(--cdv-elevated); color: var(--cdv-cinnabar-text);">
+                {count}
+              </span>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-lg font-bold m-0">15 Chủ đề đời sống</h2>
+      <div class="cdv-editorial-grid">
+        {categories.map((cat) => {
+          const count = getSayingsByCategory(cat.slug).length;
+          return (
+            <a href={`/chu-de/${cat.slug}`} class="cdv-card cdv-card-interactive p-5 no-underline flex flex-col justify-between gap-3" style="color: var(--cdv-text);">
+              <div class="flex items-start justify-between gap-2">
+                <h3 class="text-base font-bold m-0">{cat.name}</h3>
+                <span class="text-xs font-bold tabular-nums px-2.5 py-0.5 rounded-md border shrink-0" style="border-color: var(--cdv-border); background-color: var(--cdv-elevated); color: var(--cdv-cinnabar-text);">
+                  {count}
+                </span>
+              </div>
+              <p class="text-xs m-0 leading-relaxed" style="color: var(--cdv-text-secondary);">{cat.description}</p>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

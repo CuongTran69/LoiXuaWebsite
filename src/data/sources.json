@@ -1,0 +1,38 @@
+{
+  "sources": [
+    {
+      "id": "wikiquote",
+      "name": "Wikiquote tiếng Việt",
+      "url": "https://vi.wikiquote.org/",
+      "license": "CC BY-SA 4.0",
+      "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0/deed.vi",
+      "note": "Kho tàng ca dao, tục ngữ cộng đồng đã chuẩn hóa chính tả và phân loại."
+    },
+    {
+      "id": "kho-tang-ca-dao",
+      "name": "Kho tàng Ca dao người Việt",
+      "author": "Nguyễn Xuân Kính, Phan Đăng Nhật (Chủ biên)",
+      "url": null,
+      "license": "Tham khảo học thuật",
+      "licenseURL": null,
+      "note": "Công trình khảo cứu đối sánh dị bản và phân loại vùng miền uy tín bậc nhất."
+    },
+    {
+      "id": "tu-dien-thanh-ngu-tuc-ngu",
+      "name": "Từ điển Thành ngữ và Tục ngữ Việt Nam",
+      "author": "GS. Nguyễn Lân",
+      "url": null,
+      "license": "Tham khảo học thuật",
+      "licenseURL": null,
+      "note": "Nguồn tham khảo giải nghĩa điển tích và ngữ cảnh sử dụng."
+    },
+    {
+      "id": "editorial-team",
+      "name": "Ban biên soạn Lời Xưa",
+      "url": null,
+      "license": "Original Creative Commons BY 4.0",
+      "licenseURL": "https://creativecommons.org/licenses/by/4.0/",
+      "note": "Biên tập giải nghĩa từ cổ, ví dụ ứng dụng hiện đại và hiệu đính văn bản."
+    }
+  ]
+}

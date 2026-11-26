@@ -1,0 +1,42 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import TodayDashboard from '@/components/TodayDashboard';
+import AppBanner from '@/components/AppBanner.astro';
+import { pickTodaySaying } from '@/core/daily-picker';
+import { categories, sayings } from '@/data/catalog';
+
+const initialToday = pickTodaySaying(sayings, new Date(), true) ?? sayings[0];
+const initialSample = sayings.slice(0, 60);
+
+const webAppSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Lời Xưa',
+  url: 'https://loixua.tmkstudio.io.vn',
+  applicationCategory: 'EducationApplication',
+  inLanguage: 'vi',
+  description: 'Kho tàng 949+ câu ca dao, tục ngữ, thành ngữ Việt Nam có giải nghĩa, giọng đọc studio, gieo quẻ, đố vui và đấu nối vế.',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'VND',
+  },
+};
+---
+
+<BaseLayout
+  title="Lời Xưa — Ca dao, Tục ngữ & Thành ngữ Việt Nam"
+  description="Đọc câu ca dao hôm nay theo lịch Âm–Dương, tra cứu 949+ ca dao, tục ngữ, thành ngữ có giải nghĩa, nghe giọng đọc studio, gieo quẻ và đấu nối vế."
+  canonicalPath="/"
+  jsonLd={webAppSchema}
+>
+  <div class="space-y-10">
+    <TodayDashboard
+      client:load
+      initialSayings={initialSample}
+      initialToday={initialToday}
+      initialCategories={categories}
+    />
+    <AppBanner />
+  </div>
+</BaseLayout>

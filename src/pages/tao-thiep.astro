@@ -1,0 +1,13 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CardStudioPage from '@/components/CardStudioPage';
+import { sayings } from '@/data/catalog';
+---
+
+<BaseLayout
+  title="Studio Thiệp Lời Xưa — Tạo ảnh ca dao chia sẻ | Lời Xưa"
+  description="Tự thiết kế và xuất ảnh thiệp ca dao, tục ngữ sắc nét 4 tỉ lệ (Story 9:16, Feed 4:5, Vuông 1:1, Ngang 16:9)."
+  canonicalPath="/tao-thiep"
+>
+  <CardStudioPage client:load initialSaying={sayings[0]} />
+</BaseLayout>

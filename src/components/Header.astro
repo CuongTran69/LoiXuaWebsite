@@ -1,0 +1,286 @@
+---
+interface Props {
+  currentPath: string;
+  hideZen?: boolean;
+}
+
+const { currentPath, hideZen = false } = Astro.props;
+
+const primaryLinks = [
+  { href: '/', label: 'Hôm nay', match: (p: string) => p === '/' },
+  { href: '/kham-pha', label: 'Kho tàng', match: (p: string) => p.startsWith('/kham-pha') || p.startsWith('/chu-de') || p.startsWith('/loai') || p.startsWith('/cau') || p.startsWith('/tim-kiem') },
+  { href: '/luot-tho', label: 'Lướt thơ', match: (p: string) => p.startsWith('/luot-tho') },
+  { href: '/nghe-ngu', label: 'Nghe ban đêm', match: (p: string) => p.startsWith('/nghe-ngu') },
+];
+
+const secondaryLinks = [
+  { href: '/gieo-que', label: 'Gieo quẻ dân gian', desc: 'Rút thẻ lời tiền nhân theo tâm nguyện', match: (p: string) => p.startsWith('/gieo-que') },
+  { href: '/dau', label: 'Đấu nối vế 1v1', desc: 'Thi đấu trực tuyến hoặc đấu nhanh với Máy', match: (p: string) => p.startsWith('/dau') },
+  { href: '/do-vui', label: 'Đố vui nối vế', desc: 'Trắc nghiệm 20 câu tục ngữ, ca dao', match: (p: string) => p.startsWith('/do-vui') },
+  { href: '/tao-thiep', label: 'Studio tạo thiệp', desc: 'Thiết kế & xuất ảnh thơ PNG 4 tỉ lệ', match: (p: string) => p.startsWith('/tao-thiep') },
+  { href: '/da-luu', label: 'Thư viện đã lưu', desc: 'Các câu yêu thích & cảm nhận cá nhân', match: (p: string) => p.startsWith('/da-luu') },
+  { href: '/so-tay', label: 'Sổ tay & Triện', desc: 'Theo dõi tiến độ & mở khóa Con dấu', match: (p: string) => p.startsWith('/so-tay') },
+];
+
+const isSecondaryActive = secondaryLinks.some((s) => s.match(currentPath));
+---
+
+<header id="site-header" class="site-header">
+  <div id="header-inner" class="header-inner">
+    <a href="/" class="flex items-center gap-2.5 no-underline shrink-0" style="color: var(--cdv-text);">
+      <img src="/icons/app-icon.png" alt="Logo Lời Xưa" width="34" height="34" class="rounded-lg shadow-sm block" />
+      <div class="leading-tight">
+        <span class="font-bold text-lg tracking-tight block" style="font-family: var(--cdv-poem-font);">Lời Xưa</span>
+        <span class="text-[11px] hidden sm:block" style="color: var(--cdv-text-secondary);">Kho tàng dân gian Việt</span>
+      </div>
+    </a>
+
+    <nav class="site-nav" aria-label="Điều hướng chính">
+      <ul id="site-menu" class="site-menu" popover="auto">
+        {primaryLinks.map((item) => {
+          const active = item.match(currentPath);
+          return (
+            <li>
+              <a
+                href={item.href}
+                aria-current={active ? 'page' : undefined}
+                class="site-nav-link"
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        })}
+
+        {/* Desktop collapsed secondary menu ("Khác ▾") */}
+        <li class="nav-more-desktop relative">
+          <button
+            type="button"
+            id="more-menu-btn"
+            popovertarget="more-nav-menu"
+            popovertargetaction="toggle"
+            aria-controls="more-nav-menu"
+            aria-current={isSecondaryActive ? 'true' : undefined}
+            class="site-nav-link border-0 bg-transparent cursor-pointer"
+          >
+            <span>Khác</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+          <div id="more-nav-menu" popover="auto" class="more-nav-popover">
+            <ul class="list-none m-0 p-1.5 space-y-1">
+              {secondaryLinks.map((item) => {
+                const active = item.match(currentPath);
+                return (
+                  <li>
+                    <a
+                      href={item.href}
+                      aria-current={active ? 'page' : undefined}
+                      class="block px-3 py-2 rounded-lg no-underline transition-colors hover:opacity-90"
+                      style={active
+                        ? 'background-color: color-mix(in srgb, var(--cdv-cinnabar-text) 12%, transparent); color: var(--cdv-cinnabar-text);'
+                        : 'color: var(--cdv-text);'}
+                    >
+                      <span class="block text-xs font-semibold">{item.label}</span>
+                      <span class="block text-[11px]" style="color: var(--cdv-text-secondary);">{item.desc}</span>
+                    </a>
+                  </li>
+                );
+              })}
+              <li class="pt-1 mt-1 border-t" style="border-color: var(--cdv-border);">
+                <button
+                  type="button"
+                  data-open-app-popup
+                  class="w-full text-left px-3 py-2 rounded-lg border-0 bg-transparent cursor-pointer transition-colors hover:opacity-90"
+                  style="color: var(--cdv-cinnabar-text);"
+                >
+                  <span class="block text-xs font-bold">Tải App iOS &amp; Android</span>
+                  <span class="block text-[11px]" style="color: var(--cdv-text-secondary);">Quét QR cài ứng dụng đọc offline</span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        {/* Mobile hamburger flat list */}
+        <li class="nav-more-flat pt-2 mt-1 border-t" style="border-color: var(--cdv-border);" aria-hidden="false">
+          <span class="block px-3 py-1 text-[10px] font-bold uppercase tracking-wider" style="color: var(--cdv-text-tertiary);">
+            Trò chơi &amp; Tiện ích
+          </span>
+        </li>
+        {secondaryLinks.map((item) => {
+          const active = item.match(currentPath);
+          return (
+            <li class="nav-more-flat">
+              <a
+                href={item.href}
+                aria-current={active ? 'page' : undefined}
+                class="site-nav-link"
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        })}
+        <li class="nav-more-flat">
+          <button
+            type="button"
+            data-open-app-popup
+            class="site-nav-link w-full border-0 bg-transparent cursor-pointer text-left"
+            style="color: var(--cdv-cinnabar-text);"
+          >
+            Tải App iOS &amp; Android
+          </button>
+        </li>
+      </ul>
+
+      <div class="flex items-center gap-2 ml-2">
+        <button
+          type="button"
+          id="open-command-search-btn"
+          aria-label="Tìm kiếm nhanh (Ctrl+K hoặc /)"
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs cursor-pointer transition-colors"
+          style="border-color: var(--cdv-border); background-color: var(--cdv-elevated); color: var(--cdv-text-secondary);"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <span class="hidden sm:inline">Tìm nhanh</span>
+          <kbd class="hidden lg:inline px-1.5 py-0.5 text-[10px] rounded border font-mono" style="border-color: var(--cdv-border); background-color: var(--cdv-bg);">⌘K</kbd>
+        </button>
+
+        {!hideZen && (
+          <button
+            type="button"
+            id="open-zen-btn"
+            aria-label="Mở nhạc nền thiền"
+            title="Nhạc nền thiền"
+            class="relative p-2 rounded-lg border cursor-pointer inline-flex items-center justify-center"
+            style="border-color: var(--cdv-border); background-color: var(--cdv-elevated); color: var(--cdv-text);"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 18V5l12-2v13" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="18" cy="16" r="3" />
+            </svg>
+            <span id="zen-active-dot" class="hidden absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full" style="background-color: var(--cdv-bamboo-text);" aria-hidden="true" />
+          </button>
+        )}
+
+        <button
+          type="button"
+          id="open-settings-btn"
+          aria-label="Cài đặt giao diện và dữ liệu"
+          class="p-2 rounded-lg border cursor-pointer inline-flex items-center justify-center"
+          style="border-color: var(--cdv-border); background-color: var(--cdv-elevated); color: var(--cdv-text);"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          class="menu-button inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold cursor-pointer"
+          popovertarget="site-menu"
+          popovertargetaction="toggle"
+          aria-controls="site-menu"
+          style="border-color: var(--cdv-border); background-color: var(--cdv-elevated); color: var(--cdv-text);"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <line x1="4" x2="20" y1="6" y2="6" />
+            <line x1="4" x2="20" y1="12" y2="12" />
+            <line x1="4" x2="20" y1="18" y2="18" />
+          </svg>
+          <span>Menu</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    var header = document.getElementById('site-header');
+    var inner = document.getElementById('header-inner');
+    var menu = document.getElementById('site-menu');
+    if (!header || !inner || !menu) return;
+
+    var lastHeaderWidth = 0;
+
+    function syncNavbar(force) {
+      var headerWidth = header.clientWidth;
+      if (!force && !header.classList.contains('is-wide') && headerWidth <= lastHeaderWidth) {
+        return;
+      }
+      lastHeaderWidth = headerWidth;
+
+      var wasOpen = menu.matches(':popover-open') || menu.classList.contains(':popover-open');
+      header.classList.add('is-measuring');
+      header.classList.add('is-wide');
+      menu.removeAttribute('popover');
+
+      var fits = inner.scrollWidth <= inner.clientWidth + 1;
+      if (!fits) {
+        header.classList.remove('is-wide');
+        menu.setAttribute('popover', 'auto');
+        var moreMenu = document.getElementById('more-nav-menu');
+        if (moreMenu && typeof moreMenu.hidePopover === 'function') {
+          try { moreMenu.hidePopover(); } catch (e) {}
+        }
+        if (wasOpen && typeof menu.showPopover === 'function') {
+          try { menu.showPopover(); } catch (e) {}
+        }
+      }
+
+      requestAnimationFrame(function () {
+        header.classList.remove('is-measuring');
+      });
+    }
+
+    if (typeof ResizeObserver === 'function') {
+      var ro = new ResizeObserver(function () { syncNavbar(false); });
+      ro.observe(header);
+      ro.observe(menu);
+    }
+    window.addEventListener('load', function () { syncNavbar(true); });
+    syncNavbar(true);
+
+    document.getElementById('open-settings-btn')?.addEventListener('click', function () {
+      window.dispatchEvent(new CustomEvent('loixua-open-settings'));
+    });
+
+    document.getElementById('open-command-search-btn')?.addEventListener('click', function () {
+      window.dispatchEvent(new CustomEvent('loixua-open-search'));
+    });
+
+    var zenBtn = document.getElementById('open-zen-btn');
+    var zenDot = document.getElementById('zen-active-dot');
+    zenBtn?.addEventListener('click', function () {
+      window.dispatchEvent(new CustomEvent('loixua-toggle-zen'));
+    });
+    window.addEventListener('loixua-zen-state', function (e) {
+      var playing = Boolean(e && e.detail && e.detail.playing);
+      if (zenDot) zenDot.classList.toggle('hidden', !playing);
+      if (zenBtn) {
+        zenBtn.style.borderColor = playing ? 'var(--cdv-bamboo-text)' : 'var(--cdv-border)';
+        zenBtn.style.color = playing ? 'var(--cdv-bamboo-text)' : 'var(--cdv-text)';
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      var target = e.target;
+      var inInput = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        window.dispatchEvent(new CustomEvent('loixua-open-search'));
+      } else if (!inInput && e.key === '/') {
+        e.preventDefault();
+        window.dispatchEvent(new CustomEvent('loixua-open-search'));
+      }
+    });
+  })();
+</script>
